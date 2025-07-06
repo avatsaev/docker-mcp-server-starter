@@ -94,8 +94,6 @@ Extract transcript text from a YouTube video.
 ### `extract_video_id_from_url`
 Extract the video ID from various YouTube URL formats.
 
-### `digitize_name`
-Convert a name to a digitized format using ASCII codes.
 
 ## Development
 
