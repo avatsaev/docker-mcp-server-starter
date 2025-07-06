@@ -1,0 +1,56 @@
+services:
+  youtube-mcp-server:
+    build: .
+    container_name: youtube-mcp-server
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      - PYTHONUNBUFFERED=1
+      - HOST=0.0.0.0
+      - PORT=8000
+      - LOG_LEVEL=INFO
+      - MCP_SERVER_NAME=YouTube MCP Server
+      - MCP_SERVER_VERSION=0.1.0
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "sh", "-c", "nc -z localhost 8000 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - mcp-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.youtube-mcp.rule=Host(`youtube-mcp.localhost`)"
+      - "traefik.http.services.youtube-mcp.loadbalancer.server.port=8000"
+
+  # Optional: Add a reverse proxy for production deployment
+  traefik:
+    image: traefik:v3.0
+    container_name: traefik
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080"  # Traefik dashboard
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - mcp-network
+    profiles:
+      - production
+
+networks:
+  mcp-network:
+    driver: bridge
+
+volumes:
+  logs:
