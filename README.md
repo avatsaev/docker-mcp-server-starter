@@ -1,4 +1,4 @@
-# YouTube MCP Server
+# Docker FastMCP Server Starter
 
 A Model Context Protocol (MCP) server that provides YouTube-related tools including transcript extraction and name digitization.
 
@@ -6,7 +6,6 @@ A Model Context Protocol (MCP) server that provides YouTube-related tools includ
 
 - **YouTube Transcript Extraction**: Get transcripts from YouTube videos
 - **Video ID Extraction**: Extract video IDs from YouTube URLs
-- **Name Digitization**: Convert names to ASCII code format
 
 ## Configuration
 
